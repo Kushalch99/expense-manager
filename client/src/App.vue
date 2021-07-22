@@ -1,9 +1,9 @@
 <template>
   <v-app class="app">
     <navbar name="kushal"/>
-    <v-container class="fill-height" fluid>
+    <v-content class="fill-height" fluid>
       <router-view />
-    </v-container>
+    </v-content>
   </v-app>
 </template>
 
@@ -15,7 +15,6 @@ export default {
   },
   data(){
     return {
-      drawer: true,
       name: 'Kushal'
     }
   }
