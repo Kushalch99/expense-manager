@@ -1,33 +1,43 @@
 <template>
   <div>
+    <v-container class="card-container">
+      <v-btn style="position: absolute; right: 0;margin: 10px" @click="showDialog = true">New Expense</v-btn>
+    </v-container>
     <v-container class="card-container" v-for="(expense, index) in expenses" :key="index">
       <expense-card 
         :amount="expense.amount" 
         :category="expense.category" 
         :description="expense.description"
+        :date-time="expense.dateTime"
       />
     </v-container>
+    <add-expense-dialog :showDialog="showDialog" @close="(value) => showDialog = value"/>
   </div>
 </template>
 
 <script>
 import ExpenseCard from '@/components/ExpenseCard'
+import AddExpenseDialog from '@/components/AddExpenseDialog.vue'
+import moment from 'moment'
 export default {
   name: 'Expenses',
   components: {
-    ExpenseCard
+    ExpenseCard,
+    AddExpenseDialog
   },
   data () {
     return {
-      expenses: []
+      expenses: [],
+      showDialog: false
     }
   },
   mounted() {
     for(let i = 0;i<5;i++){
       this.expenses.push({
-        amount: `Rs. ${100*(i+1)}`,
+        amount: `${100*(i+1)}`,
         category: 'Home',
-        description: 'Expense description lorem ipsum'
+        description: 'Expense description lorem ipsum',
+        dateTime: moment()
       })
     }
   }
