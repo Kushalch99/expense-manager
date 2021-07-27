@@ -1,7 +1,7 @@
 <template>
   <nav>
     <v-app-bar app dense>   
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon v-if="isLoggedIn" @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title>Expenses Manager</v-toolbar-title>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" app temporary hide-overlay>
@@ -11,7 +11,7 @@
 
       <v-divider></v-divider>
       <v-list>
-        <menu-item title="Dashboard" icon="mdi-folder" to="/"/>
+        <menu-item title="Dashboard" icon="mdi-folder" to="/dashboard"/>
         <menu-item title="Expenses" icon="mdi-account-multiple" to="/expense"/>
         <menu-item title="Report" icon="mdi-star" to="/report"/>
       </v-list>
@@ -34,6 +34,11 @@ export default {
   data(){
     return {
       drawer: false
+    }
+  },
+  computed: {
+    isLoggedIn(){
+      return localStorage.getItem('token') !== null
     }
   }
 }

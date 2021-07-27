@@ -1,7 +1,7 @@
 <template>
   <v-app class="app">
-    <navbar name="kushal"/>
     <v-content class="fill-height" fluid>
+      <navbar name="kushal"/>
       <router-view />
     </v-content>
   </v-app>
