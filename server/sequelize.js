@@ -1,4 +1,8 @@
 const Sequelize = require('sequelize')
+const UserModel = require('./models/user')
+const ExpenseModel = require('./models/expense')
+const CategoryModel = require('./models/category')
+const { Categories } = require('./constants')
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -18,6 +22,9 @@ const sequelize = new Sequelize(
 )
 
 var db = {}
+db.User = UserModel(sequelize, Sequelize)
+db.Expense = ExpenseModel(sequelize, Sequelize)
+db.Category = CategoryModel(sequelize, Sequelize)
 
 Object.keys(db).forEach(function (modelName) {
   if ('classMethods' in db[modelName].options) {
@@ -31,6 +38,11 @@ sequelize
   .sync({ force: false, alter: false })
   .then(async () => {
     console.log('Database & tables created!')
+    Object.keys(Categories).forEach(async (key) => {
+      await db.Category.findOrCreate({
+        where: { id: Categories[key].id, name: Categories[key].name }
+      }).catch(err => console.log(err))
+    })  
   })
   
 module.exports.db = db
