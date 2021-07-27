@@ -1,6 +1,8 @@
-const db = require('@/sequelize').db
+const db = require('../sequelize').db
+const passport = require('./passportAuth').passport
+const jwt = require('jsonwebtoken')
 
-exports.login = (req, res) => {
+exports.login = async (req, res, next) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     console.log(err)
     if (err || !user) {
@@ -22,7 +24,7 @@ exports.login = (req, res) => {
   })(req, res, next)
 }
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
   try{
     let { name, userName, password } = req.body
     let isValid = validateBody(name, userName, password)
@@ -48,6 +50,6 @@ exports.signup = (req, res) => {
   }
 }
 
-const isValid = (name, userName, password){
+const validateBody = (name, userName, password) => {
   return name && name !== '' && userName && userName !== '' && password && password !== ''
 }

@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import api from '@/apis'
 export default {
   name: 'AuthForm',
   props:{
@@ -57,10 +58,20 @@ export default {
     }
   },
   methods: {
-    submit(){
+    async submit(){
       let isValid =  this.$refs.form.validate()
       if(!isValid)
         alert('not valid')
+      let res = ''
+      if(this.isLogin){
+        res = await api.login({userName: this.userName, password: this.password})
+        this.$cookies.set('auth', res)
+        localStorage.setItem('token', res.token)
+        this.$router.push('/dashboard')
+      }else{
+        res = await api.signup({ name: this.name, userName: this.userName, password: this.password})
+      }
+      console.log("response", res)
     }
   }
 }

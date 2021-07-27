@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <navbar />
     <total-expense :total-expense="totalExpense" />
     <v-divider></v-divider>
     <v-card class="card">
@@ -22,11 +23,13 @@
 <script>
 import ExpenseCard from '@/components/ExpenseCard'
 import TotalExpense from '@/components/TotalExpense.vue'
+import Navbar from '@/components/Navbar.vue'
 export default {
   name: 'Dashboard',
   components: {
     ExpenseCard,
-    TotalExpense
+    TotalExpense,
+    Navbar
   },
   data () {
     return {

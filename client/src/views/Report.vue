@@ -1,5 +1,6 @@
 <template>
   <div>
+    <navbar />
     <h2 style="text-align: center; margin-top: 5px">Expense Report</h2>
     <v-card class="report-card" style="background: aliceblue">
       <line-chart v-if="isMounted" :chart-data="weeklyChartData" :options="weeklyChartOptions" :type="true" />    
@@ -18,12 +19,14 @@
 import LineChart from '@/components/charts/LineChart.vue'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import PieChart from '@/components/charts/PieChart.vue'
+import Navbar from '@/components/Navbar.vue'
 export default {
   name: 'Report',
   components: {
     LineChart,
     DoughnutChart,
-    PieChart
+    PieChart,
+    Navbar
   },
   data () {
     return {

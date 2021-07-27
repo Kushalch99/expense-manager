@@ -1,5 +1,6 @@
 <template>
   <div>
+    <navbar />
     <v-container class="card-container">
       <v-btn style="position: absolute; right: 0;margin: 10px" @click="showDialog = true">New Expense</v-btn>
     </v-container>
@@ -19,11 +20,13 @@
 import ExpenseCard from '@/components/ExpenseCard'
 import AddExpenseDialog from '@/components/AddExpenseDialog.vue'
 import moment from 'moment'
+import Navbar from '@/components/Navbar.vue'
 export default {
   name: 'Expenses',
   components: {
     ExpenseCard,
-    AddExpenseDialog
+    AddExpenseDialog,
+    Navbar
   },
   data () {
     return {
