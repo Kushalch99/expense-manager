@@ -63,13 +63,19 @@ export default {
       if(!isValid)
         alert('not valid')
       let res = ''
-      if(this.isLogin){
-        res = await api.login({userName: this.userName, password: this.password})
-        this.$cookies.set('auth', res)
-        localStorage.setItem('token', res.token)
-        this.$router.push('/dashboard')
-      }else{
-        res = await api.signup({ name: this.name, userName: this.userName, password: this.password})
+      try{
+        if(this.isLogin){
+          res = await api.login({userName: this.userName, password: this.password})
+          localStorage.setItem('token', res.token)
+          this.$router.push('/dashboard')
+        }else{
+          res = await api.signup({ name: this.name, userName: this.userName, password: this.password})
+          alert('User successfully registered')
+          this.$router.push('/login')
+        }
+      }catch(err){
+        console.log(err)
+        alert(err.message)
       }
       console.log("response", res)
     }

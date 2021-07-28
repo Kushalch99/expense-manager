@@ -45,6 +45,7 @@ export default {
       this.$emit('close', false)
     },
     deleteExpense(){
+      this.$emit('delete', true)
       this.closeDialog()
     }
   }

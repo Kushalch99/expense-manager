@@ -18,7 +18,6 @@ exports.login = async (req, res, next) => {
       const token = jwt.sign(payload, process.env.JWT_SECRET);
       var cookiePayload = { user, token }
       console.log(cookiePayload)
-      res.cookie('auth', JSON.stringify(cookiePayload), { domain: process.env.DOMAIN_NAME, maxAge: 5 * 60 * 1000 });
       return res.json({ user, token });
     })
   })(req, res, next)

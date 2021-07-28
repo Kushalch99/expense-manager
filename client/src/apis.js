@@ -51,5 +51,14 @@ export default {
   },
   signup(user){
     return this.execute('post', 'api/signup', user)
+  },
+  createExpense(expense){
+    return this.execute('post', 'api/expense', expense)
+  },
+  getExpenses({ limit, offset }){
+    return this.execute('get', 'api/expenses', null, { limit: limit, offset: offset })
+  },
+  deleteExpense(expenseId){
+    return this.execute('delete', `api/expense/${expenseId}`)
   }
 }

@@ -3,7 +3,7 @@
     <v-card class="row" elevation="2" outlined style="margin-top: 10px">
       <v-col cols="10">
         <v-card-title> Rs. {{ amount }} </v-card-title>
-        <v-card-subtitle> {{ category }} - {{ formattedDateTime }} </v-card-subtitle>
+        <v-card-subtitle> {{ categoryName }} - {{ formattedDateTime }} </v-card-subtitle>
         <v-card-text> {{ description }} </v-card-text>
       </v-col>
       <v-col cols="2">
@@ -15,34 +15,40 @@
         </v-btn>
       </v-col>
     </v-card>
-    <delete-expense-dialog :showDialog="showDeleteDialog" @close="(value) => showDeleteDialog = value"/>
+    <delete-expense-dialog :showDialog="showDeleteDialog" @close="(value) => showDeleteDialog = value" @delete="(value) => deleteExpense(value)"/>
     <add-expense-dialog :showDialog="showDialog" :isExistingExpense="true" :expense="expense" @close="(value) => showDialog = value"/>
   </div>
 </template>
 
 <script>
-import AddExpenseDialog from './AddExpenseDialog.vue'
+import AddExpenseDialog from '@/components/AddExpenseDialog.vue'
 import moment from 'moment'
-import DeleteExpenseDialog from './DeleteExpenseDialog.vue'
+import DeleteExpenseDialog from '@/components/DeleteExpenseDialog.vue'
+import { Categories } from '@/constants'
+import api from '@/apis'
 export default {
   components: { AddExpenseDialog, DeleteExpenseDialog },
   name: 'ExpenseCard',
   props: {
+    id: {
+      type: Number,
+      default: 1
+    },
     amount: {
-      type: String,
-      default: '0'
+      type: Number,
+      default: 0
     },
     category: {
-      type: String,
-      default: 'Other'
+      type: Number,
+      default: 1
     },
     description: {
       type: String,
       default: ''
     },
     dateTime: {
-      type: Object,
-      default: () => {}
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -61,8 +67,25 @@ export default {
         time: moment(this.dateTime).format('hh:mm')
       }
     },
+    categoryName(){
+      let key = Object.keys(Categories).find(ele => parseInt(Categories[ele].id) === this.category)
+      return Categories[key].name
+    },
     formattedDateTime(){
       return moment(this.dateTime).format('DD-MM-YYYY hh:mm a')
+    }
+  },
+  methods: {
+    async deleteExpense(value) {
+      if(!value)
+        return
+      try{
+        await api.deleteExpense(this.id)
+        this.$router.go()
+      }catch(err){
+        console.log(err)
+        alert(err.message)
+      }
     }
   }
 }

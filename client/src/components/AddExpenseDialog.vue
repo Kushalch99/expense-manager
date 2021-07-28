@@ -123,6 +123,9 @@
 </template>
 
 <script>
+import api from '@/apis'
+import moment from 'moment'
+import { Categories } from '@/constants'
 export default {
   components: {  
   },
@@ -151,7 +154,7 @@ export default {
       timeMenu: false,
       time: null,
       category: null,
-      categories: [ 'Home' , 'Food' , 'Fuel', 'Shopping', 'Other']
+      categories: Object.keys(Categories)
     }
   },
   mounted () {
@@ -164,9 +167,22 @@ export default {
     }
   },
   methods: {
-    submit(){
+    async submit(){
       var isValid = this.$refs.form.validate()
-      alert(`is Valid ${isValid}`)
+      if(!isValid)
+        alert('Invalid')
+      try{
+        await api.createExpense({
+          amount: this.amount,
+          description: this.description,
+          category: Categories[this.category].id,
+          dateTime: moment(this.date).add(this.time).format('YYYY-MM-DD HH:MM')
+        })
+        this.$router.go()
+      }catch(err){
+        console.log(err)
+        alert(err.message)
+      }
     },
     closeDialog(){
       this.$emit('close', false)

@@ -4,7 +4,6 @@ import './registerServiceWorker'
 import router from './router'
 import vuetify from './plugins/vuetifiy'
 import VueProgressBar from 'vue-progressbar'
-import VueCookies from 'vue-cookies'
 
 Vue.config.productionTip = false
 
@@ -20,7 +19,8 @@ Vue.use(VueProgressBar, {
   autoRevert: true,
   inverse: false
 })
-Vue.use(VueCookies)
+
+window.Vue = Vue
 
 export default new Vue({
   router,
