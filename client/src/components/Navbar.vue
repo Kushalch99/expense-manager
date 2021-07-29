@@ -14,6 +14,7 @@
         <menu-item title="Dashboard" icon="mdi-folder" to="/dashboard"/>
         <menu-item title="Expenses" icon="mdi-account-multiple" to="/expense"/>
         <menu-item title="Report" icon="mdi-star" to="/report"/>
+        <menu-item title="Logout" icon="mdi-account-arrow-right" to="/logout" />
       </v-list>
     </v-navigation-drawer>
   </nav>

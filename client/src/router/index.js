@@ -37,6 +37,12 @@ const routes = [
     name: 'Report',
     component: () => import('@/views/Report.vue'),
     meta: { requiresLoggedIn: true }
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: () => import('@/views/Logout.vue'),
+    meta: { requiresLoggedIn: true }
   }
 ]
 
