@@ -1,4 +1,5 @@
 const db = require('../sequelize').db
+const sequelize = require('../sequelize').sequelize
 
 exports.createExpense = async (req, res) => {
   try{
@@ -69,6 +70,19 @@ exports.deleteExpense = async (req, res) => {
       }
     })
     return res.status(200).json({ message: 'Expense Successfully deleted' })
+  }catch(err){
+    console.log(err)
+    return res.status(500).json({ message: err.message })
+  }
+}
+
+exports.getUserDashboard = async (req, res) => {
+  try{
+    var result = await db.Expense.findOne({
+      where: { userId: req.user.id },
+      attributes: [[sequelize.fn('sum', sequelize.col('amount')), 'totalExpense']]
+    })
+    return res.status(200).json(result)
   }catch(err){
     console.log(err)
     return res.status(500).json({ message: err.message })

@@ -63,5 +63,8 @@ export default {
   },
   updateExpense(expenseId, expense){
     return this.execute('put', `api/expense/${expenseId}`, expense)
+  },
+  getUserDashboard(){
+    return this.execute('get', 'api/dashboard')
   }
 }

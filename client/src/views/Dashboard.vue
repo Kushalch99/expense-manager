@@ -1,19 +1,21 @@
 <template>
-  <div class="home">
+  <div class="home" v-if="isMounted">
     <navbar />
     <total-expense :total-expense="totalExpense" />
     <v-divider></v-divider>
     <v-card class="card">
       <v-card-text>
         <div class="text-h4 font-weight-thin" style="text-align: center">
-          Last 5 transactions
+          Recent transactions
         </div>
       </v-card-text>
       <v-container class="card-container" v-for="(expense, index) in expenses" :key="index">
         <expense-card 
+          :id="expense.id"
           :amount="expense.amount" 
           :category="expense.category" 
           :description="expense.description"
+          :dateTime="expense.dateTime"
         />
       </v-container>
     </v-card>
@@ -21,6 +23,7 @@
 </template>
 
 <script>
+import api from '@/apis'
 import ExpenseCard from '@/components/ExpenseCard'
 import TotalExpense from '@/components/TotalExpense.vue'
 import Navbar from '@/components/Navbar.vue'
@@ -34,18 +37,18 @@ export default {
   data () {
     return {
       expenses: [],
-      totalExpense: null
+      totalExpense: null,
+      isMounted: false
     }
   },
-  mounted(){
-    this.totalExpense = 1000
-    for(let i = 0;i<5;i++){
-      this.expenses.push({
-        amount: `Rs. ${100*(i+1)}`,
-        category: 'Home',
-        description: 'Expense description lorem ipsum'
-      })
-    }
+  async mounted(){
+    let [dashboardRes, expensesRes] = await Promise.all([
+                                        api.getUserDashboard(), 
+                                        api.getExpenses({ limt: 5, offset: 0 })
+                                      ])
+    this.totalExpense = dashboardRes.totalExpense
+    this.expenses = expensesRes.expenses
+    this.isMounted = true
   }
 }
 </script>

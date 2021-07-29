@@ -31,4 +31,9 @@ module.exports = function (app) {
     passport.authenticate("jwt", { session: false }),
     expenseController.deleteExpense
   )
+    
+  app.get('/api/dashboard',
+    passport.authenticate("jwt", { session: false }),
+    expenseController.getUserDashboard
+  )
 }
