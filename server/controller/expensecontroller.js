@@ -89,6 +89,40 @@ exports.getUserDashboard = async (req, res) => {
   }
 }
 
+exports.getUserReport = async (req, res) => {
+  try{
+    let month = req.query.month
+    let categoryStats = await db.Expense.findAll({
+      attributes: ['categoryId', [ sequelize.fn('sum', sequelize.col('amount')), 'expense' ]],
+      where: { 
+        userId: req.user.id,
+        $and: sequelize.where(sequelize.fn('month', sequelize.col('dateTime')), month)
+      },
+      include: [{
+        model: db.Category,
+        attributes: ['id', 'name']
+      }],
+      group: 'categoryId'
+    })
+    let weeklyStats = await db.Expense.findAll({
+      attributes: [
+        [sequelize.literal('week(`dateTime`, 3)-week(`dateTime`-interval day(`dateTime`)-1 day , 3)+1'), 'week'] , 
+        [sequelize.fn('sum', sequelize.col('amount')), 'expense' ]
+      ],
+      where: { 
+        userId: req.user.id,
+        $and: sequelize.where(sequelize.fn('month', sequelize.col('dateTime')), month)
+      },
+      group: [sequelize.col('week')],
+      order: [sequelize.col('week')]
+    })
+    return res.status(200).json({ categoryStats, weeklyStats })
+  }catch(err){
+    console.log(err)
+    return res.status(500).json({ message: err.message })
+  }
+}
+
 const validateExpense = ( amount, description, category, dateTime ) => {
   return amount && amount !== '' && category && category !== '' && dateTime && dateTime !== ''
 }

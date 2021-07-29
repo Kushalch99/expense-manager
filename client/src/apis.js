@@ -66,5 +66,8 @@ export default {
   },
   getUserDashboard(){
     return this.execute('get', 'api/dashboard')
+  },
+  getUserReport({ month }){
+    return this.execute('get', 'api/report', null, { month: month })
   }
 }
