@@ -171,17 +171,29 @@ export default {
       var isValid = this.$refs.form.validate()
       if(!isValid)
         alert('Invalid')
-      try{
-        await api.createExpense({
-          amount: this.amount,
-          description: this.description,
-          category: Categories[this.category].id,
-          dateTime: moment(this.date).add(this.time).format('YYYY-MM-DD HH:MM')
-        })
-        this.$router.go()
-      }catch(err){
-        console.log(err)
-        alert(err.message)
+      let expense = {
+        amount: this.amount,
+        description: this.description,
+        category: Categories[this.category].id,
+        dateTime: moment(this.date).add(this.time).format('YYYY-MM-DD HH:mm')
+      }
+      console.log('dt', expense.dateTime)
+      if(!this.isExistingExpense){
+        try{
+          await api.createExpense(expense)
+          this.$router.go()
+        }catch(err){
+          console.log(err)
+          alert(err.message)
+        }
+      }else{
+        try{
+          await api.updateExpense(this.expense.id, expense)
+          this.$router.go()
+        }catch(err){
+          console.log(err)
+          alert(err.message)
+        }
       }
     },
     closeDialog(){

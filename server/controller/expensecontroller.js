@@ -27,7 +27,8 @@ exports.getExpenses = async (req,  res) => {
     let result = await db.Expense.findAndCountAll({
       where: { userId: req.user.id },
       limit: limit,
-      offset: offset
+      offset: offset,
+      order: [['dateTime', 'desc']]
     })
     return res.status(200).json({ count: result.count, expenses: result.rows })
   }catch(err){
@@ -36,14 +37,34 @@ exports.getExpenses = async (req,  res) => {
   }
 }
 
+exports.updateExpense = async (req, res) => {
+  try{
+    let expenseId = req.params.expenseId
+    let { amount, description, category, dateTime } = req.body
+    await db.Expense.update(
+      {
+        amount: amount,
+        description: description,
+        categoryId: category,
+        dateTime: dateTime
+      },
+      { where: { id: expenseId, userId: req.user.id } } 
+    )
+    return res.status(200).json({ message: 'Updated Sucessfully '})
+  }catch(err){
+    console.log(err)
+    return res.status(500).json({ message: err.message })
+  }
+}
+
 exports.deleteExpense = async (req, res) => {
   try{
-    let id = req.params.id
-    if(!id || id === '')
+    let expenseId = req.params.expenseId
+    if(!expenseId || expenseId === '')
       throw new Error('Invalid expense')
     await db.Expense.destroy({
       where: {
-        id: id,
+        id: expenseId,
         userId: req.user.id
       }
     })

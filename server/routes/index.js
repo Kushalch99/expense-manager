@@ -22,7 +22,12 @@ module.exports = function (app) {
     expenseController.getExpenses
   )
   
-  app.delete('/api/expense/:id',
+  app.put('/api/expense/:expenseId',
+    passport.authenticate("jwt", { session: false }),
+    expenseController.updateExpense
+  )
+  
+  app.delete('/api/expense/:expenseId',
     passport.authenticate("jwt", { session: false }),
     expenseController.deleteExpense
   )

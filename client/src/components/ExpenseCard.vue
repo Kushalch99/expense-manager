@@ -59,11 +59,13 @@ export default {
   },
   computed: {
     expense () {
+      let categoryKey = Object.keys(Categories).find(ele => parseInt(Categories[ele].id) === this.category) 
       return {
+        id: this.id,
         amount: this.amount,
-        category: this.category,
+        category: categoryKey,
         description: this.description,
-        date: moment(this.dateTime).format('DD-MM-YYYY'),
+        date: moment(this.dateTime).format('YYYY-MM-DD'),
         time: moment(this.dateTime).format('hh:mm')
       }
     },

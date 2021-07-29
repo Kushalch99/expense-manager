@@ -60,5 +60,8 @@ export default {
   },
   deleteExpense(expenseId){
     return this.execute('delete', `api/expense/${expenseId}`)
+  },
+  updateExpense(expenseId, expense){
+    return this.execute('put', `api/expense/${expenseId}`, expense)
   }
 }
